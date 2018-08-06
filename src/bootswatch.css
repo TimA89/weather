@@ -4197,7 +4197,7 @@ input[type="button"].btn-block {
           align-items: center;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
-          justify-content: space-between;
+          /* justify-content: space-between; SuperTim*/
 }
 
 .navbar-brand {
@@ -4205,9 +4205,10 @@ input[type="button"].btn-block {
   padding-top: 0.3125rem;
   padding-bottom: 0.3125rem;
   margin-right: 1rem;
-  font-size: 1.25rem;
+  font-size: 2.25rem;
   line-height: inherit;
   white-space: nowrap;
+  text-align: center;
 }
 
 .navbar-brand:hover, .navbar-brand:focus {
@@ -4225,6 +4226,7 @@ input[type="button"].btn-block {
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
+  border: 1px solid black;
 }
 
 .navbar-nav .nav-link {

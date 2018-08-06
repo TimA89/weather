@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import './App.css'
+// import './App.css'
 // import "bootstrap/dist/css/bootstrap.css"
 import './bootswatch.css'
 
-import { Navbar, NavItem, Nav, Grid, Row, Col } from "react-bootstrap"
+import { Navbar, NavItem, Nav, Grid, Row, Col, NavDropdown, MenuItem, FormGroup, FormControl, Button } from "react-bootstrap"
 
 const PLACES = [
   { name: "Boston", zip: "02108" },
@@ -12,11 +12,17 @@ const PLACES = [
   { name: "Honolulu", zip: "96813" }
 ]
 
+const divStyle = {
+  float: 'right'
+}
+
 class WeatherDisplay extends Component {
   constructor() {
     super()
     this.state = {
-      weatherData: null
+      weatherData: null,
+      lastLat: null,
+      lastLong: null
     }
   }
 
@@ -27,6 +33,13 @@ class WeatherDisplay extends Component {
       "&appid=b1b35bba8b434a28a0be2a3e1071ae5b&units=imperial"
     fetch(URL).then(res => res.json()).then(json => {
       this.setState({ weatherData: json })
+    })
+    this.watchID = navigator.geolocation.watchPosition((position) => {
+      this.setState({
+        // If there are no new values set the current ones
+        lastLat: position.coords.latitude || this.state.lastLat,
+        lastLong: position.coords.longitude || this.state.lastLong
+      })
     })
   }
   render() {
@@ -61,17 +74,28 @@ class App extends Component {
     const activePlace = this.state.activePlace
     return (
       <div>
-        <Navbar>
-          <Navbar.Header>
-            <Navbar.Brand>
-              Your Weather
-            </Navbar.Brand>
-          </Navbar.Header>
-        </Navbar>
+      <Navbar inverse collapseOnSelect>
+        <Navbar.Header>
+          <Navbar.Brand style={divStyle}>
+            <span>React-Bootstrap</span>
+          </Navbar.Brand>
+          <Navbar.Toggle />
+        </Navbar.Header>
+      </Navbar>
         <Grid>
           <Row>
             <Col md={4} sm={4}>
               <h3>Select a city</h3>
+              <Navbar.Form pullLeft>
+                <FormGroup>
+                  <FormControl type="text" placeholder="Search" />
+                // </FormGroup>{' '}
+                <Button type="submit">Submit</Button>
+              </Navbar.Form>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={4} sm={4}>
               <Nav
                 bsStyle="pills"
                 stacked
