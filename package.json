@@ -9,6 +9,7 @@
     "react": "^16.4.1",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.4.1",
+    "react-geosuggest": "^2.8.0",
     "react-scripts": "1.1.4"
   },
   "scripts": {

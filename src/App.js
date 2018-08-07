@@ -1,7 +1,12 @@
+/* global google */
+
 import React, { Component } from 'react'
-// import './App.css'
-// import "bootstrap/dist/css/bootstrap.css"
+
 import './bootswatch.css'
+
+// import './App.css'
+
+import Geosuggest from './Geosuggest/Geosuggest.jsx';
 
 import { Navbar, NavItem, Nav, Grid, Row, Col, NavDropdown, MenuItem, FormGroup, FormControl, Button } from "react-bootstrap"
 
@@ -11,10 +16,6 @@ const PLACES = [
   { name: "New York", zip: "10023" },
   { name: "Honolulu", zip: "96813" }
 ]
-
-const divStyle = {
-  float: 'right'
-}
 
 class WeatherDisplay extends Component {
   constructor() {
@@ -28,12 +29,20 @@ class WeatherDisplay extends Component {
 
   componentDidMount() {
     const zip = this.props.zip
+    const lat = this.props.lat
+    const lon = this.props.lon
     const URL = "http://api.openweathermap.org/data/2.5/weather?zip=" +
       zip + ",us" +
       "&appid=b1b35bba8b434a28a0be2a3e1071ae5b&units=imperial"
     fetch(URL).then(res => res.json()).then(json => {
       this.setState({ weatherData: json })
     })
+    // const URL = "api.openweathermap.org/data/2.5/weather?lat=" + lat +
+    // "&lon=" + lon +
+    // "&appid=b1b35bba8b434a28a0be2a3e1071ae5b&units=imperial"
+    // fetch(URL).then(res => res.json()).then(json => {
+    //   this.setState({ weatherData: json })
+    // })
     this.watchID = navigator.geolocation.watchPosition((position) => {
       this.setState({
         // If there are no new values set the current ones
@@ -70,14 +79,27 @@ class App extends Component {
     }
   }
 
+  //
+  //  When a suggest got selected
+  //  @param  {Object} suggest The suggest
+  //
+  onSuggestSelect(suggest) {
+    console.log(suggest); // eslint-disable-line
+  }
+
   render() {
+    const fixtures = [
+      {label: 'New York', location: {lat: 40.7033127, lng: -73.979681}},
+      {label: 'Rio', location: {lat: -22.066452, lng: -42.9232368}},
+      {label: 'Tokyo', location: {lat: 35.673343, lng: 139.710388}}
+    ]
     const activePlace = this.state.activePlace
     return (
       <div>
       <Navbar inverse collapseOnSelect>
         <Navbar.Header>
-          <Navbar.Brand style={divStyle}>
-            <span>React-Bootstrap</span>
+          <Navbar.Brand>
+            <span>Sanfa</span>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
@@ -86,12 +108,14 @@ class App extends Component {
           <Row>
             <Col md={4} sm={4}>
               <h3>Select a city</h3>
-              <Navbar.Form pullLeft>
-                <FormGroup>
-                  <FormControl type="text" placeholder="Search" />
-                // </FormGroup>{' '}
-                <Button type="submit">Submit</Button>
-              </Navbar.Form>
+              <div>
+              <Geosuggest
+              onSuggestSelect={this.onSuggestSelect}
+              fixtures={fixtures}
+              location={new google.maps.LatLng(53.558572, 9.9278215)}
+              radius="20"
+              / >
+              </div>
             </Col>
           </Row>
           <Row>
@@ -100,12 +124,10 @@ class App extends Component {
                 bsStyle="pills"
                 stacked
                 activeKey={activePlace}
-                onSelect={index => {
+                onClick={index => {
                   this.setState({ activePlace: index })
                 }} >
-                {PLACES.map((place, index) => (
-                  <NavItem key={index} eventKey={index}>{place.name}</NavItem>
-                ))}
+                {<NavItem><h3>Curent Location</h3></NavItem>}
               </Nav>
             </Col>
             <Col md={8} sm={8}>
