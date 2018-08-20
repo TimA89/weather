@@ -8,7 +8,7 @@ import './bootswatch.css'
 
 import Geosuggest from './Geosuggest/Geosuggest.jsx';
 
-import { Navbar, NavItem, Nav, Grid, Row, Col, NavDropdown, MenuItem, FormGroup, FormControl, Button } from "react-bootstrap"
+import { Navbar, NavItem, Nav, Grid, Row, Col } from "react-bootstrap"
 
 const PLACES = [
   { name: "Boston", zip: "02108" },
@@ -44,6 +44,7 @@ class WeatherDisplay extends Component {
     //   this.setState({ weatherData: json })
     // })
     this.watchID = navigator.geolocation.watchPosition((position) => {
+    console.log(position)
       this.setState({
         // If there are no new values set the current ones
         lastLat: position.coords.latitude || this.state.lastLat,
